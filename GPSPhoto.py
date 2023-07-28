@@ -37,35 +37,43 @@ df=pd.DataFrame({'Image': [],'Lat_DD': [],'Long_DD': [],'Elev_ft': [],'Bearing_d
 with st.form("my-form", clear_on_submit =True):
     uploaded_files = st.file_uploader("Upload your image files here:",accept_multiple_files=True)
     submitted = st.form_submit_button("Upload!")
-    
-    #uploaded_file=Image.open("/Users/mattsparacino/Downloads/IMG_3962.jpg")
-    for uploaded_file in uploaded_files:
-    
-    #%% load images and loop through to extract data
-        exif = get_exif(uploaded_file)
-    
-        #%% convert to decimals
-        try:
-            lat=exif["GPSInfo"]["GPSLatitude"]
-            lat_DD=lat[0].numerator+lat[1].numerator/60+lat[2].numerator/lat[2].denominator/3600
-            long=exif["GPSInfo"]["GPSLongitude"]
-            long_DD=(long[0].numerator+long[1].numerator/60+long[2].numerator/long[2].denominator/3600)*-1
-            alt=exif["GPSInfo"]["GPSAltitude"]
-            alt_ft=alt.numerator/alt.denominator*3.28084
-            brg=exif["GPSInfo"]["GPSDestBearing"]
-            brgdeg=brg.numerator/brg.denominator
-                
-            im_data=pd.DataFrame({'Image': [uploaded_file.name],'Lat_DD': [lat_DD],'Long_DD': [long_DD],'Elev_ft': [alt_ft],'Bearing_deg' : [brgdeg]}) 
-        except:
-            im_data=pd.DataFrame({'Image': [uploaded_file.name],'Lat_DD': [np.nan],'Long_DD': [np.nan],'Elev_ft': [np.nan],'Bearing_deg' : [np.nan]})
-            
-    # #%% concat dataframe
-        df=pd.concat([df,im_data])
         
     if submitted and uploaded_files is not None:
         st.write("Uploaded!")
+        
+for uploaded_file in uploaded_files:
     
-    #%% Display datatable
+#%% load images and loop through to extract data
+    exif = get_exif(uploaded_file)
+
+    #%% convert to decimals
+    try:
+        lat=exif["GPSInfo"]["GPSLatitude"]
+        lat_DD=lat[0].numerator+lat[1].numerator/60+lat[2].numerator/lat[2].denominator/3600
+    except:
+        lat_DD=np.nan
+    try:
+        long=exif["GPSInfo"]["GPSLongitude"]
+        long_DD=(long[0].numerator+long[1].numerator/60+long[2].numerator/long[2].denominator/3600)*-1
+    except:
+        long_DD=np.nan
+    try:
+        alt=exif["GPSInfo"]["GPSAltitude"]
+        alt_ft=alt.numerator/alt.denominator*3.28084
+    except:
+        alt_ft=np.nan
+    try:
+        brg=exif["GPSInfo"]["GPSImgDirection"]
+        brgdeg=brg.numerator/brg.denominator
+    except:
+        brgdeg=np.nan
+            
+    im_data=pd.DataFrame({'Image': [uploaded_file.name],'Lat_DD': [lat_DD],'Long_DD': [long_DD],'Elev_ft': [alt_ft],'Bearing_deg' : [brgdeg]}) 
+        
+# #%% concat dataframe
+    df=pd.concat([df,im_data])
+    
+#%% Display datatable
 
 project = st.text_input(
     "Enter short project name (to be used in csv file name):")
