@@ -38,9 +38,6 @@ with st.form("my-form", clear_on_submit =True):
     uploaded_files = st.file_uploader("Upload your image files here:",accept_multiple_files=True)
     submitted = st.form_submit_button("Upload!")
     
-    if submitted and uploaded_files is not None:
-        st.write("Uploaded!")
-    
     #uploaded_file=Image.open("/Users/mattsparacino/Downloads/IMG_3962.jpg")
     for uploaded_file in uploaded_files:
     
@@ -64,6 +61,9 @@ with st.form("my-form", clear_on_submit =True):
             
     # #%% concat dataframe
         df=pd.concat([df,im_data])
+        
+    if submitted and uploaded_files is not None:
+        st.write("Uploaded!")
     
     #%% Display datatable
 
