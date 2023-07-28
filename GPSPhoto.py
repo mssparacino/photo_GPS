@@ -34,7 +34,12 @@ def get_exif(filename):
 df=pd.DataFrame({'Image': [],'Lat_DD': [],'Long_DD': [],'Elev_ft': [],'Bearing_deg': []})
 
 #%% create widget for uploading multiple files (<200mb each)
-uploaded_files = st.file_uploader("Upload your image files here:",accept_multiple_files=True)
+with st.form("my-form", clear_on_submit =True):
+    uploaded_files = st.file_uploader("Upload your image files here:",accept_multiple_files=True)
+    submitted = st.form_submit_button("Upload!")
+    
+    if submitted and uploaded_files is not None:
+        st.write("Uploaded!")
 
 project = st.text_input(
     "Enter short project name (to be used in csv file name):")
@@ -58,7 +63,7 @@ for uploaded_file in uploaded_files:
             
         im_data=pd.DataFrame({'Image': [uploaded_file.name],'Lat_DD': [lat_DD],'Long_DD': [long_DD],'Elev_ft': [alt_ft],'Bearing_deg' : [brgdeg]}) 
     except:
-        im_data=pd.DataFrame({'Image': [uploaded_file.name],'Lat_DD': [np.nan],'Long_DD': [np.nan],'Elev_ft': [np.nan],'Bearing_deg' : [brgdeg]})
+        im_data=pd.DataFrame({'Image': [uploaded_file.name],'Lat_DD': [np.nan],'Long_DD': [np.nan],'Elev_ft': [np.nan],'Bearing_deg' : [np.nan]})
         
 # #%% concat dataframe
     df=pd.concat([df,im_data])
