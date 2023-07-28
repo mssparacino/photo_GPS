@@ -31,7 +31,7 @@ def get_exif(filename):
     return exif_data    
 
 #%% create empty dataframe
-df=pd.DataFrame({'Image': [],'Lat_DD': [],'Long_DD': [],'Elev_ft': []})
+df=pd.DataFrame({'Image': [],'Lat_DD': [],'Long_DD': [],'Elev_ft': [],'Bearing_deg': []})
 
 #%% create widget for uploading multiple files (<200mb each)
 uploaded_files = st.file_uploader("Upload your image files here:",accept_multiple_files=True)
@@ -53,10 +53,12 @@ for uploaded_file in uploaded_files:
         long_DD=(long[0].numerator+long[1].numerator/60+long[2].numerator/long[2].denominator/3600)*-1
         alt=exif["GPSInfo"]["GPSAltitude"]
         alt_ft=alt.numerator/alt.denominator*3.28084
+        brg=exif["GPSInfo"]["GPSDestBearing"]
+        brgdeg=brg.numerator/brg.denominator
             
-        im_data=pd.DataFrame({'Image': [uploaded_file.name],'Lat_DD': [lat_DD],'Long_DD': [long_DD],'Elev_ft': [alt_ft]}) 
+        im_data=pd.DataFrame({'Image': [uploaded_file.name],'Lat_DD': [lat_DD],'Long_DD': [long_DD],'Elev_ft': [alt_ft],'Bearing_deg' : [brgdeg]}) 
     except:
-        im_data=pd.DataFrame({'Image': [uploaded_file.name],'Lat_DD': [np.nan],'Long_DD': [np.nan],'Elev_ft': [np.nan]})
+        im_data=pd.DataFrame({'Image': [uploaded_file.name],'Lat_DD': [np.nan],'Long_DD': [np.nan],'Elev_ft': [np.nan],'Bearing_deg' : [brgdeg]})
         
 # #%% concat dataframe
     df=pd.concat([df,im_data])
