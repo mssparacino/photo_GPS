@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Spyder Editor
+2023/07/28
 
-This is a temporary script file.
+Created by Matt Sparacino (Matt.Sparacino@Greeleygov.com)
+
 """
 import streamlit as st
 import pandas as pd
@@ -61,14 +62,14 @@ for uploaded_file in uploaded_files:
     df=pd.concat([df,im_data])
 
 #%% Display datatable
-st.dataframe(
-    df,
-    hide_index=True)
+
+
+df=df.set_index("Image")
+st.dataframe(df)
 
 @st.cache_data
 def convert_df(df):
     return df.to_csv().encode('utf-8')
-
 csv=convert_df(df)
 
 st.download_button(
