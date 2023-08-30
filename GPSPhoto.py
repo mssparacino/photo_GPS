@@ -31,7 +31,7 @@ def get_exif(filename):
     return exif_data    
 
 #%% create empty dataframe
-df=pd.DataFrame({'Image': [],'Lat_DD': [],'Long_DD': [],'Elev_ft': [],'Bearing_deg': [],'Date_time',[]})
+df=pd.DataFrame({'Image': [],'Lat_DD': [],'Long_DD': [],'Elev_ft': [],'Bearing_deg': [],'Date_time': []})
 
 #%% create widget for uploading multiple files (<200mb each)
 with st.form("my-form", clear_on_submit =True):
