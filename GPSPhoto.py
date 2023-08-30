@@ -83,7 +83,7 @@ for uploaded_file in uploaded_files:
                           'Long_DD': [long_DD],
                           'Elev_ft': [alt_ft],
                           'Bearing_deg' : [brgdeg],
-                          'Date_Time': [dt]}) 
+                          'Date_Time': [dt1]}) 
         
 # #%% concat dataframe
     df=pd.concat([df,im_data])
