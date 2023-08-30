@@ -31,7 +31,7 @@ def get_exif(filename):
     return exif_data    
 
 #%% create empty dataframe
-df=pd.DataFrame({'Image': [],'Lat_DD': [],'Long_DD': [],'Elev_ft': [],'Bearing_deg': []})
+df=pd.DataFrame({'Image': [],'Lat_DD': [],'Long_DD': [],'Elev_ft': [],'Bearing_deg': [],'Date_time',[]})
 
 #%% create widget for uploading multiple files (<200mb each)
 with st.form("my-form", clear_on_submit =True):
@@ -67,8 +67,17 @@ for uploaded_file in uploaded_files:
         brgdeg=brg.numerator/brg.denominator
     except:
         brgdeg=np.nan
+    try:
+        dt=exif["DateTime"]
+    except:
+        dt=np.nan
             
-    im_data=pd.DataFrame({'Image': [uploaded_file.name],'Lat_DD': [lat_DD],'Long_DD': [long_DD],'Elev_ft': [alt_ft],'Bearing_deg' : [brgdeg]}) 
+    im_data=pd.DataFrame({'Image': [uploaded_file.name],
+                          'Lat_DD': [lat_DD],
+                          'Long_DD': [long_DD],
+                          'Elev_ft': [alt_ft],
+                          'Bearing_deg' : [brgdeg],
+                          'Date_Time': [dt]}) 
         
 # #%% concat dataframe
     df=pd.concat([df,im_data])
