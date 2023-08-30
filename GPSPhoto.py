@@ -68,7 +68,13 @@ for uploaded_file in uploaded_files:
     except:
         brgdeg=np.nan
     try:
-        dt=exif["DateTime"]
+        dt=exif["DateTimeDigitized"]
+        date=dt[0:10]
+        date=date.replace(":", "-")
+        time=dt[11:]
+        dt1=date+" "+time
+        dt1=pd.to_datetime(dt1)
+
     except:
         dt=np.nan
             
